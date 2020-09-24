@@ -1,31 +1,26 @@
-const request = require('request');
 const ipify = 'https://api.ipify.org/?format=json';
+const request = require('request-promise-native');
 
 
-const fetchMyIP = (cb) => {
-  return new Promise((res, rej) => {
-    request(ipify, (err, response, body) => {
-      // console.log(body);
-      let obj = JSON.parse(body);
-      // console.log(obj.ip);
-      if (response.statusCode !== 200) {
-        const msg = `Status code: ${response.statusCode} when fetching IP. Reponse: ${body}`;
-        return cb(Error(msg), null);
-      }
-      if (!err)
-        res(cb(err, obj.ip));
-      else
-        rej(cb(err, obj.ip));
-    });
-  }).catch(err => '');
-};
-// fetchMyIP('');
+const fetchMyIP = () => request(ipify);
+const fetchCoordsByIP = body => {
+  const ip = JSON.parse(body).ip;
+  return request('https://ipvigilante.com/' + ip);
+}
+const fetchISSFlyOverTimes = body => {
+  const coords = {'latitude': JSON.parse(body).data.latitude, 'longitude': JSON.parse(body).data.longitude};
+  return request(`http://api.open-notify.org/iss-pass.json?lat=${coords.latitude}&lon=${coords.longitude}`)
+}
 
-// fetchMyIP('').then(data => {
-//   console.log(data);
-// }).catch(err => {
-//   console.log(err);
-//   throw new Error(err);
-// })
+const nextISSTimesForMyLocation = () => {
+  return fetchMyIP()
+  .then(fetchCoordsByIP)
+  .then(fetchISSFlyOverTimes)
+  .then(data => {
+    const {response} = JSON.parse(data); //{response} is same as obj.response.
+    return response;
+  })
+}
 
-module.exports = { fetchMyIP };
+
+module.exports = { nextISSTimesForMyLocation };
