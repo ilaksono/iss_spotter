@@ -1,16 +1,20 @@
 // const { fetchMyIP } = require('./iss-prom');
-const { fetchMyIP } = require('./iss-cb');
+const { fetchMyIP, fetchCoordsByIP } = require('./iss-cb');
+
 
 fetchMyIP((error, ip) => {
   if (error) {
     console.log("It didn't work!" , error);
     return;
   }
-
   console.log('It worked! Returned IP:' , ip);
 });
-// .then(error, data => {
 
-// }).catch((error, data) => {
-
-// });
+fetchCoordsByIP('99.229.163.181', (error, data) => {
+  // console.log(err, data)
+  if (error) {
+    console.log("It didn't work!" , error);
+    return;
+  }
+  console.log(data);
+});
