@@ -34,6 +34,8 @@ const fetchCoordsByIP = (ip, cb) => {
   });
 }
 
+//http://api.open-notify.org/iss-pass.json?lat=LAT&lon=LON
+//example op: Next pass at Fri Jun 01 2021 13:01:35 GMT-0700 (Pacific Daylight Time) for 465 seconds!
 
 module.exports = {
   fetchMyIP,
