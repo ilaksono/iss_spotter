@@ -1,4 +1,5 @@
-const { fetchMyIP } = require('./iss');
+// const { fetchMyIP } = require('./iss-prom');
+const { fetchMyIP } = require('./iss-cb');
 
 fetchMyIP((error, ip) => {
   if (error) {
@@ -7,7 +8,7 @@ fetchMyIP((error, ip) => {
   }
 
   console.log('It worked! Returned IP:' , ip);
-})
+});
 // .then(error, data => {
 
 // }).catch((error, data) => {
